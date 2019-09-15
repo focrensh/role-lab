@@ -3,6 +3,13 @@ Build a Role Lab
 
 .. contents:: :depth: 3
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents2:
+
+   examples/ex1_modules
+
+
 What is an Ansible Role
 -----------------------
 
