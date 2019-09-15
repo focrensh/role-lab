@@ -30,7 +30,7 @@ Example of roles in galaxy
 
 - Group common tasks together to get a desired outcome
   - Role to deploy a global load balancing solution (GSLB)
-  - Role to toublshoot the BIG-IP (create tech support, backup and restore confguration etc.)
+  - Role to troublshoot the BIG-IP (create tech support, backup and restore confguration etc.)
   
 Complete list of  `F5 Ansible roles <https://galaxy.ansible.com/f5devcentral>`_ in galaxy
 
