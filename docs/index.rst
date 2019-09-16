@@ -229,8 +229,6 @@ Role1 - Using Ansible modules
 
 * :doc:`examples/ex1_modules`
 
-Now that the role is ready let's take a look at how we can reference a role within a playbook for execution
-
 Role2 - Using AS3 
 ~~~~~~~~~~~~~~~~~
 
@@ -243,8 +241,8 @@ Above are examples of how to develop a role and what a role with F5 BIG-IP would
 
 You are encouraged to pick one of the use cases below and or come up with your own F5 BIG-IP use case and build a role for it. If completed we will upload the role to Ansible Galaxy for the community to be able to consume.
 
-- Upload and attach iRules
-- Display relevant information about BIG-IP (software version/hardware etc.)
+- Create tech window by disabling all members in a pool and attaching a Maintenance irule.
+- Set Base config settings such as NTP, DNS, Hostname, etc
 - Parse virtual server information and display the default pool hence and pool members that belong to the pool
 
 Take a look at |f5ansiblemodules| available and get started 
