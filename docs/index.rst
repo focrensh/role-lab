@@ -11,19 +11,31 @@ Build a Role Lab
    examples/ex2_declarative
 
 
+Lab Environment
+---------------
+
+You will get login information at the beginning of class. Verify you can ssh to your lab ansible host on the primary page using your student number. Below is a diagram of the lab environment that you will be working in.
+
+|labenv|
+
+.. NOTE:: You can retrieve the IP of your F5 BIG-IP instance in /home/studentX/networking_workshop/lab_inventory/hosts file. Access the GUI in  the browser with https://X.X.X.X:8443/
+
 What is an Ansible Role
 -----------------------
 
-Ansible role is an independent component which allows reuse of common configuration steps. Ansible roles have to be used within playbook. An Ansible role is a set of tasks to configure a device to a desired state. Roles are defined using YAML files with a predefined directory structure. This predefined structure allows a roles behavior to be predictable when reusing them.
-
-We will go over the directory structure later in the lab
+An Ansible role is an independent component which allows reuse of common configuration objects. You can use an Ansible Role by adding to a new or existing playbook. An Ansible role is a set of tasks to configure a device to a desired state. Roles are defined using YAML files with a predefined directory structure. This predefined structure allows a roles behavior to be predictable when reusing them. We will go over this directory structure later in the lab
 
 For complete documentation refer to https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html
 
 Why use an Ansible Role
 -----------------------
 
-Advantages: The proper organization of roles will not only simplify your work with scripts, improving their structure and further support, but also eliminates duplication of tasks in playbooks. A role is a way of splitting Ansible tasks into files which are easier to manipulate with.
+Roles allow you to group common tasks or actions together to create a desired end state. By adding these tasks to a role, you are allowing the reference of a single object, the role, to add similar functionality to any playbook.
+
+- Reduce rework (common functionality is shared)
+- Improve reliability (lower number of 1-off playbooks)
+- Single Source-of-Truth for the role
+- Makes playbooks easier to read
 
 Role Structure
 --------------
@@ -73,7 +85,7 @@ Example roles in Galaxy
 
 - Installing NGINX regardless of destination platform. (https://galaxy.ansible.com/nginxinc/nginx)
 
-  - The Role can figure out if its debian or ubuntu or others and run the appropriate modules/commands to install nginx
+  - The Role can figure out if the platform is debian, ubuntu, or others and run the appropriate modules/commands to install nginx
 
 - Group common tasks together to get a desired outcome
 
@@ -90,42 +102,47 @@ By default **ansible** will look for and install roles in 1 of 2 places:
    - Releative to current playbook being run: ``./roles`` 
    - Global for the ansible install: ``/etc/ansible/roles``
 
-#. Navigate to the ``networking-workshop/`` directory.
+#. Verify that you are in the home directory for your student number before we begin. Some of the variables we will use throughout this guide will assume this location.
 
    .. code:: shell
 
-      [student1@ansible ~]$ cd networking-workshop/
-      [student1@ansible networking-workshop]$
+      [student1@ansible ~]$ pwd
+      /home/student1
 
 #. Now we are going to create a folder relative to our current working directory to store our ansible roles.
 
    .. code:: shell
 
-      [student1@ansible networking-workshop]$ mkdir roles
+      [student1@ansible ~]$ mkdir roles
 
-#. Next we will update the **ansible.cfg** file for our current user to tell ansible to find and install roles in the new folder we created. At the bottom of the file we will add the line ``roles_path = ./roles``.
+#. Next we will update the ``ansible.cfg`` file for our current user to tell ansible to find and install roles in the new folder we created. Under the **[defaults]** section of the config file, right below **inventory**, we will add the line ``roles_path = ~/roles``.
 
    .. code:: shell
 
       [student1@ansible networking-workshop]$ vi ~/.ansible.cfg
       [defaults]
+      stdout_callback = yaml
       connection = smart
       timeout = 60
-      inventory = /home/student1/networking-workshop/lab_inventory/hosts
+      deprecation_warnings = False
       host_key_checking = False
-      private_key_file = /home/student1/.ssh/aws-private.pem
-      roles_path = ./roles
+      retry_files_enabled = False
+      inventory = /home/student1/networking-workshop/lab_inventory/hosts
+      roles_path = ~/roles
+      [persistent_connection]
+      connect_timeout = 60
+      command_timeout = 60
 
 #. Lets view what current roles are installed (it should be none). In the current terminal run ``ansible-galaxy list``.
 
    .. code:: shell
 
-      [student1@ansible networking-workshop]$ ansible-galaxy list
-      # /---/.ansible/roles
+      [student1@ansible ~]$ ansible-galaxy list
+      # /home/student1/roles
 
-   For the current environment, it will list out the path for each defined location roles are stored. If there are any roles, they will show here. Once we install and create roles later on, you can run this command again to see them.
+   For the current environment, it will list out the path for each defined location roles are stored. If there are any roles, they will show here. Once we install and create roles later on, you can run this command again to see them. Right now it should list of the location you just defined in the ``ansible.cfg`` file with nothing under within it.
 
-#. Now that our environment is ready to use roles, lets install one from **Ansible Galaxy**. Navigate to |f5rolefacts| and install the role. Spend some time looking at the **Read Me** page for the role as well as this is generated from the README file in the role structure. The **Details** page of this role will provide an installation snippet like below. Copy this command using the **copy** icon and paste it into your terminal. The Role should install and the output should look similar to the shell output below.
+#. Now that our environment is ready to use roles, lets install one from **Ansible Galaxy**. Navigate to |f5rolefacts| to view the role that we are going to install. Spend some time looking at the **Read Me** page for the role as this is generated from the README file in the role structure. The **Details** page of this role will provide an installation snippet like below. Copy this command using the **copy** icon and paste it into your terminal. The Role should install and the output should look similar to the shell output below.
 
    |role-install|
 
@@ -136,18 +153,29 @@ By default **ansible** will look for and install roles in 1 of 2 places:
       [student1@ansible networking-workshop]$ ansible-galaxy install focrensh.f5_role_facts
         - downloading role 'f5_role_facts', owned by focrensh
         - downloading role from https://github.com/focrensh/f5-role-facts/archive/master.tar.gz
-        - extracting focrensh.f5_role_facts to /home/student1/networking-workshop/roles/focrensh.f5_role_facts
+        - extracting focrensh.f5_role_facts to /home/student1/roles/focrensh.f5_role_facts
         - focrensh.f5_role_facts (master) was installed successfully
 
 #. Run the ``ansible-galaxy list`` command again to see that the new role is installed.
 
-#. Spend some time looking through the role folders/files in ``./roles/focrensh/f5_role_facts``. You will see many of the files mentioned before. The primary file to look at would be the ``tasks/main.yml`` as it has the tasks that will take place when the role is called. You will see tasks in this file for gathering facts from the BIG-IP and then parsing the fact to return information about the BIG-IP such as MAC and VERSION. These should look the same as tasks that you would normally just put inside a playbook directly.
+   .. code:: shell
+
+      [student1@ansible ~]$ ansible-galaxy list
+      # /home/student1/roles
+      - focrensh.f5_role_facts, master
+
+#. Spend some time looking through the role folders/files in ``./roles/focrensh.f5_role_facts``. You will see many of the files mentioned before. The primary file to look at would be the ``tasks/main.yml`` as it has the tasks that will take place when the role is called. You will see tasks in this file for gathering facts from the BIG-IP and then parsing the fact to return information about the BIG-IP such as MAC and VERSION. These should look the same as tasks that you would normally put inside a playbook directly.
+
+   Primary files to take note of:
+
+   - ``./roles/focrensh.f5_role_facts/tasks/main.yml`` Tasks for the role
+   - ``./roles/focrensh.f5_role_facts/defaults/main.yml`` Default Vars for the role
 
 Referencing a Role in a playbook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Now that we have downloaded a role, lets look how to add it into an Ansible playbook. There is more than one way to reference a role within a playbook.
 
-Classic (original way) - ansible will check each roles directory for tasks/handlers/vars/default vars and other objects to add for the current host within the playbook.
+Classic (original way) - ansible will check each roles directory for tasks, handlers, vars, default, vars and other objects to add for the current host within the playbook. This is declared at the top of the play before ``tasks`` are defined. These objects will run before the tasks section begins.
 
 .. code:: rst
 
@@ -157,7 +185,7 @@ Classic (original way) - ansible will check each roles directory for tasks/handl
       - super_awesome_role
       - betterer_role
 
-Use Roles inline (2.4+)
+Use Roles inline (2.4+). With this method, the role is treated more like a task itself within the playbook. It allows you to define when the role is referneced within the playbook. You will see that the example roles below are mentioned under the ``tasks`` section.
 
 .. code:: yaml
 
@@ -169,11 +197,14 @@ Use Roles inline (2.4+)
      - include_role:
          name: betterer_role
        
+
+Using a role as a task has two different variants itself as show above. Import and Include.
+
 - Import (static) vs Include (dynamic)
 
   - Import tasks are treated more like part of the actual playbook.
   - Include tasks are added when the playbook gets to those tasks.
-  - Include can loop since it’s a tasks
+  - Include can loop
   - Include cannot reference/view objects within tasks such as (--list-tasks , --start-at-task, etc)
 
 Roles can use vars, tags, and conditionals just like other tasks. Below is an example of adding 2 variables to a role inline of the playbook.
@@ -185,11 +216,15 @@ Roles can use vars, tags, and conditionals just like other tasks. Below is an ex
         - include_role:
            name: super_awesome_role
           vars:
-           dir: '/opt/test'
+           app_name: app123
            app_port: 8080
 
 
-#. Lets create a playbook that will call the role we created in the previous section. Create a new playbook called ``role_playbook.yml`` and copy the yaml below into it. The name of the role matches that of the role that is now inside of the ``./roles`` directory. Notice that we are including the role into the playbook similar to tasks. When the ``include_role`` task triggers it will run the tasks within it as if they were then part of the playbook.
+#. Lets create a playbook that will call the role we created in the previous section. Create a new playbook called ``role_playbook.yml`` and copy the yaml below into it. The name of the role matches that of the role that is now inside of the ``./roles`` directory. Notice that we are including the role into the playbook similar to tasks. When the ``include_role`` task triggers it will run the tasks within it as if they were then part of the playbook. Make sure you are back in the home directory of your user with ``cd ~``.
+
+   .. code:: bash
+
+      [student1@ansible ~]$ vi role_playbook.yml
 
    .. code:: yaml
 
@@ -204,27 +239,30 @@ Roles can use vars, tags, and conditionals just like other tasks. Below is an ex
         - include_role:
             name: focrensh.f5_role_facts
 
-#. Run the play book with ``ansible-playbook role_playbook.yml``. The playbook>>role should output the VirtualServers, MAC, and VERSION of the BIG-IP.
+#. Run the play book with ``ansible-playbook role_playbook.yml``. The playbook>>role should output the VirtualServers (empty), MAC, and VERSION of the BIG-IP. (Your BIG-IP version may be different)
 
    .. code:: shell
-   
+
+      TASK [focrensh.f5_role_facts : DISPLAY Virtual Servers]
+      ok: [f5] =>
+        device_facts['virtual_servers']: []
+
       TASK [focrensh.f5_role_facts : DISPLAY THE MAC ADDRESS]
       ok: [f5] => {
           "device_facts['system_info']['base_mac_address']": "02:d1:fc:72:ba:aa"
       }
       TASK [focrensh.f5_role_facts : DISPLAY THE VERSION] 
       ok: [f5] => {
-          "device_facts['system_info']['product_version']": "14.1.0.3"
+          "device_facts['system_info']['product_version']": "13.1.0.7"
       }
 
 
    The example facts that come back from this role could now be used to take action in other parts of the playbook. We have access to the variables without having to define each task to gather/parse them directly in the playbook. We can simply include the role into the playbook making it less difficult to understand the intent of the playbook and also allowing other playbooks to reuse this role.
 
-   .. NOTE:: Grab the IP information for the F5 load balancer from the /home/studentX/networking_workshop/lab_inventory/hosts file, and type it in like so: https://X.X.X.X:8443/
-
-
 Creating Roles
 --------------
+
+In this section we are going to create new roles versus just downloading them from Galaxy. Please use the links below to run through each example.
 
 Role1 - Using Ansible modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -255,24 +293,19 @@ Upload role to galaxy DEMO
 
 
 .. |role-install| image:: images/galaxy-install.png
-   :scale: 100%
-
+.. |labenv| image:: images/env.png
 .. |f5ansibleroles| raw:: html
 
    <a href="https://galaxy.ansible.com/f5devcentral" target="_blank">F5 Ansible Roles</a>
-
 .. |f5backuprole| raw:: html
 
    <a href="https://galaxy.ansible.com/f5devcentral/backup_config" target="_blank">F5 Backup</a>
-
 .. |f5gslbrole| raw:: html
 
    <a href="https://galaxy.ansible.com/f5devcentral/bigip_gslb" target="_blank">F5 GSLB</a> 
-
 .. |f5rolefacts| raw:: html
 
    <a href="https://galaxy.ansible.com/focrensh/f5_role_facts" target="_blank">F5 Facts</a> 
-
 .. |f5ansiblemodules| raw:: html
 
    <a href="https://docs.ansible.com/ansible/latest/modules/list_of_network_modules.html#f5" target="_blank">F5 Ansible Modules</a> 
