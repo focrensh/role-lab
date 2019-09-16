@@ -102,6 +102,8 @@ By default **ansible** will look for and install roles in 1 of 2 places:
    - Releative to current playbook being run: ``./roles`` 
    - Global for the ansible install: ``/etc/ansible/roles``
 
+#. SSH to your lab ansible host with username studentX (where X is your student ID and password ansible)
+
 #. Verify that you are in the home directory for your student number before we begin. Some of the variables we will use throughout this guide will assume this location.
 
    .. code:: shell
@@ -140,9 +142,11 @@ By default **ansible** will look for and install roles in 1 of 2 places:
       [student1@ansible ~]$ ansible-galaxy list
       # /home/student1/roles
 
-   For the current environment, it will list out the path for each defined location roles are stored. If there are any roles, they will show here. Once we install and create roles later on, you can run this command again to see them. Right now it should list of the location you just defined in the ``ansible.cfg`` file with nothing under within it.
+   For the current environment, it will list out the path for each defined location roles are stored. If there are any roles, they will show here. Once we install and create roles later on, you can run this command again to see them. Right now it should list the location you just defined in the ``ansible.cfg`` file with nothing under it.
 
-#. Now that our environment is ready to use roles, lets install one from **Ansible Galaxy**. Navigate to |f5rolefacts| to view the role that we are going to install. Spend some time looking at the **Read Me** page for the role as this is generated from the README file in the role structure. The **Details** page of this role will provide an installation snippet like below. Copy this command using the **copy** icon and paste it into your terminal. The Role should install and the output should look similar to the shell output below.
+#. Now that our environment is ready to use roles, lets install one from **Ansible Galaxy**. Navigate to |f5rolefacts| to view the role that we are going to install. Spend some time looking at the **Read Me** page for the role as this is generated from the README file in the role structure. 
+
+The **Details** page of this role will provide an installation snippet like below. Copy this command using the **copy** icon and paste it into your ssh terminal window. The Role should install and the output should look similar to the shell output below.
 
    |role-install|
 
