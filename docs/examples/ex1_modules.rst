@@ -25,6 +25,14 @@ In this section we will create a new role and then add it to our existing playbo
 
 #. We will now set the default connection details for role to use when connecting to a BIG-IP. Since these vars will be **defaults** they can easily be overwritten by specifying vars in the playbook or when calling the role. They will only be used if nothing else with higher precedence is set. Edit the ``defaults/main.yml`` file with the connection details below. Remember that the variables in this file, such as **private_ip** are defined within our environments ``inventory/host`` file. 
 
+To view the host file and look at the values of the variables
+
+   .. code:: shell
+   
+      cat ~/networking-workshop/lab_inventory/hosts
+
+Moving on to the defaults/main.yml file
+
    .. code:: shell
      
      vi defaults/main.yml
@@ -48,7 +56,6 @@ In this section we will create a new role and then add it to our existing playbo
 
    .. code:: YAML
 
-      ---
       # tasks file for roles/f5_role_service
       - name: CREATE NODES
         bigip_node:
