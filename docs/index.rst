@@ -220,6 +220,8 @@ Roles can use vars, tags, and conditionals just like other tasks. Below is an ex
 
    The example facts that come back from this role could now be used to take action in other parts of the playbook. We have access to the variables without having to define each task to gather/parse them directly in the playbook. We can simply include the role into the playbook making it less difficult to understand the intent of the playbook and also allowing other playbooks to reuse this role.
 
+   .. NOTE:: Grab the IP information for the F5 load balancer from the /home/studentX/networking_workshop/lab_inventory/hosts file, and type it in like so: https://X.X.X.X:8443/
+
 
 Creating Roles
 --------------
