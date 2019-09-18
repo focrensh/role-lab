@@ -23,15 +23,15 @@ In this section we will create a new role and then add it to our existing playbo
 
    With the role created you can now view the empty files/folders that were created from the command. Navigate to the role folder with ``cd roles/f5_role_service`` and look through the files.
 
-#. We will now set the default connection details for role to use when connecting to a BIG-IP. Since these vars will be **defaults** they can easily be overwritten by specifying vars in the playbook or when calling the role. They will only be used if nothing else with higher precedence is set. Edit the ``defaults/main.yml`` file with the connection details below. Remember that the variables in this file, such as **private_ip** are defined within our environments ``inventory/host`` file. 
+#. We will now set the default connection details for role to use when connecting to a BIG-IP. Since these vars will be **defaults** they can easily be overwritten by specifying vars in the playbook or when calling the role. They will only be used if nothing else with higher precedence is set in the playbook or role. The connection details we are going to set, such as **private_ip** (IP of the BIG-IP) ,are defined within our environments ``inventory/host`` file.
 
-To view the host file and look at the values of the variables
+To view the host inventory file and look at the values of the variables
 
    .. code:: shell
    
       cat ~/networking-workshop/lab_inventory/hosts
 
-Moving on to the defaults/main.yml file
+Now edit the ``defaults/main.yml`` file with the connection details below. 
 
    .. code:: shell
      
@@ -97,7 +97,7 @@ Moving on to the defaults/main.yml file
         debug:
           msg: "The VIP (Virtual IP) is https://{{ansible_host}}"
 
-#. It is best practice to modify the ``README.md`` in the roles folder with basic information about the role. It will have a template already laid out to make filling it out easier. It is common to add a short description, examples of what variables are needed, and an example of using the role in a playbook. This is not required, but is good practice. For an idea of what to put here, looking at existing Roles on galaxy is a good place to start. ``meta/main.yml`` allows you to also specify author, revision, and dependency information to the role as well. This information will be used by Ansible Galaxy portal as well. For the sake of this guide, we can skip this step for now.
+#. It is best practice to modify the ``README.md`` in the roles folder with basic information about the role. It will have a template already laid out to make filling it out easier. It is common to add a short description, examples of what variables are needed, and an example of using the role in a playbook. This is not required, but is good practice. For an idea of what to put here, looking at existing Roles on galaxy is a good place to start. The ``meta/main.yml`` allows you to also specify author, revision, and dependency information for the role as well. This information will be displayed on the Ansible Galaxy portal as well. For the sake of this guide, we can skip these steps for now.
 
 #. Now that our Role is ready for use, lets add it to our playbook we created in the main section of this guide. Go back to your primary working directory with ``cd ~``. Open up the playbook ``role_playbook.yml`` and add the newly created role leaving the **facts** role there. It will be the same syntax as the **facts** role we added earlier.
 

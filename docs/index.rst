@@ -144,9 +144,9 @@ By default **ansible** will look for and install roles in 1 of 2 places:
 
    For the current environment, it will list out the path for each defined location roles are stored. If there are any roles, they will show here. Once we install and create roles later on, you can run this command again to see them. Right now it should list the location you just defined in the ``ansible.cfg`` file with nothing under it.
 
-#. Now that our environment is ready to use roles, lets install one from **Ansible Galaxy**. Navigate to |f5rolefacts| to view the role that we are going to install. Spend some time looking at the **Read Me** page for the role as this is generated from the README file in the role structure. 
+#. Now that our environment is ready to use roles, lets install one from **Ansible Galaxy**. Navigate to |f5rolefacts| to view the role that we are going to install. Spend some time looking at the **Read Me** page for the role as this is generated from the README file in the role structure. You can also click the |ghlink| in the top right corner to view the role itself hosted on github. The folder structure will be the same as the outline we went over at the beginning.
 
-The **Details** page of this role will provide an installation snippet like below. Copy this command using the **copy** icon and paste it into your ssh terminal window. The Role should install and the output should look similar to the shell output below.
+   The **Details** page of this role will provide an installation snippet like below. Copy this command using the **copy** icon and paste it into your ssh terminal window. The Role should install and the output should look similar to the shell output below.
 
    |role-install|
 
@@ -154,7 +154,7 @@ The **Details** page of this role will provide an installation snippet like belo
 
    .. code:: shell
 
-      [student1@ansible networking-workshop]$ ansible-galaxy install focrensh.f5_role_facts
+      [student1@ansible ~]$ ansible-galaxy install focrensh.f5_role_facts
         - downloading role 'f5_role_facts', owned by focrensh
         - downloading role from https://github.com/focrensh/f5-role-facts/archive/master.tar.gz
         - extracting focrensh.f5_role_facts to /home/student1/roles/focrensh.f5_role_facts
@@ -202,14 +202,56 @@ Use Roles inline (2.4+). With this method, the role is treated more like a task 
          name: betterer_role
        
 
-Using a role as a task has two different variants itself as show above. Import and Include.
+Using a role as a task has two different variants itself as shown above. Import and Include.
 
 - Import (static) vs Include (dynamic)
 
-  - Import tasks are treated more like part of the actual playbook.
-  - Include tasks are added when the playbook gets to those tasks.
-  - Include can loop
-  - Include cannot reference/view objects within tasks such as (--list-tasks , --start-at-task, etc)
+  - **IMPORT**
+
+    - Tasks are treated like part of the actual playbook.
+    - If there is a syntax error in the role, the playbook will error immediatly.
+    - Using ansible commands to view information about the playbook treats the role tasks as part of the playbook. Notice the ``--list-tasks``    option below shows the role tasks as part of the playbook. (`The Below output is an example, your are not expected to run this command`) 
+
+      .. code:: shell
+
+         ...
+         tasks:
+         - import_role:
+               name: focrensh.f5_role_facts
+         ...
+
+         [student1@ansible ~]$ ansible-playbook role_playbook.yml --list-tasks
+         
+         playbook: role_playbook.yml
+         
+         play #1 (f5): Role Playbook	TAGS: []
+           tasks:
+             include_role	TAGS: []
+
+  - **INCLUDE**
+
+    - Include tasks are added when the playbook gets to those tasks on execution
+    - You can use loops with the role
+    - Include cannot reference/view objects within tasks such as (--list-tasks , --start-at-task, etc). The example below shows that the tasks    within the role we just referenced do not show up as part of the playbook when using Include. (`The Below output is an example, your are not expected to run this command`)
+
+      .. code:: shell
+
+         ...
+         tasks:
+         - include_role:
+               name: focrensh.f5_role_facts
+         ...
+
+         [student1@ansible ~]$ ansible-playbook role_playbook.yml --list-tasks
+         
+         playbook: role_playbook.yml
+         
+           play #1 (f5): Role Playbook	TAGS: []
+             tasks:
+               focrensh.f5_role_facts : COLLECT BIG-IP FACTS	TAGS: []
+               focrensh.f5_role_facts : DISPLAY Virtual Servers	TAGS: []
+               focrensh.f5_role_facts : DISPLAY THE MAC ADDRESS	TAGS: []
+               focrensh.f5_role_facts : DISPLAY THE VERSION	TAGS: []
 
 Roles can use vars, tags, and conditionals just like other tasks. Below is an example of adding 2 variables to a role inline of the playbook.
 
@@ -298,6 +340,7 @@ Upload role to galaxy DEMO
 
 .. |role-install| image:: images/galaxy-install.png
 .. |labenv| image:: images/env.png
+.. |ghlink| image:: images/ghlink.png
 .. |f5ansibleroles| raw:: html
 
    <a href="https://galaxy.ansible.com/f5devcentral" target="_blank">F5 Ansible Roles</a>
@@ -309,7 +352,7 @@ Upload role to galaxy DEMO
    <a href="https://galaxy.ansible.com/f5devcentral/bigip_gslb" target="_blank">F5 GSLB</a> 
 .. |f5rolefacts| raw:: html
 
-   <a href="https://galaxy.ansible.com/focrensh/f5_role_facts" target="_blank">F5 Facts</a> 
+   <a href="https://galaxy.ansible.com/focrensh/f5_role_facts" target="_blank">F5 Facts Role</a> 
 .. |f5ansiblemodules| raw:: html
 
    <a href="https://docs.ansible.com/ansible/latest/modules/list_of_network_modules.html#f5" target="_blank">F5 Ansible Modules</a> 
