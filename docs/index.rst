@@ -216,28 +216,6 @@ Using a role as a task has two different variants itself as shown above. Import 
 
          ...
          tasks:
-         - import_role:
-               name: focrensh.f5_role_facts
-         ...
-
-         [student1@ansible ~]$ ansible-playbook role_playbook.yml --list-tasks
-         
-         playbook: role_playbook.yml
-         
-         play #1 (f5): Role Playbook	TAGS: []
-           tasks:
-             include_role	TAGS: []
-
-  - **INCLUDE**
-
-    - Include tasks are added when the playbook gets to those tasks on execution
-    - You can use loops with the role
-    - Include cannot reference/view objects within tasks such as (--list-tasks , --start-at-task, etc). The example below shows that the tasks    within the role we just referenced do not show up as part of the playbook when using Include. (`The Below output is an example, your are not expected to run this command`)
-
-      .. code:: shell
-
-         ...
-         tasks:
          - include_role:
                name: focrensh.f5_role_facts
          ...
@@ -252,6 +230,29 @@ Using a role as a task has two different variants itself as shown above. Import 
                focrensh.f5_role_facts : DISPLAY Virtual Servers	TAGS: []
                focrensh.f5_role_facts : DISPLAY THE MAC ADDRESS	TAGS: []
                focrensh.f5_role_facts : DISPLAY THE VERSION	TAGS: []
+
+  - **INCLUDE**
+
+    - Include tasks are added when the playbook gets to those tasks on execution
+    - You can use loops with the role
+    - Include cannot reference/view objects within tasks such as (--list-tasks , --start-at-task, etc). The example below shows that the tasks    within the role we just referenced do not show up as part of the playbook when using Include. (`The Below output is an example, your are not expected to run this command`)
+
+      .. code:: shell
+
+         ...
+         tasks:
+         - import_role:
+               name: focrensh.f5_role_facts
+         ...
+
+         [student1@ansible ~]$ ansible-playbook role_playbook.yml --list-tasks
+         
+         playbook: role_playbook.yml
+         
+         play #1 (f5): Role Playbook	TAGS: []
+           tasks:
+             include_role	TAGS: []
+             
 
 Roles can use vars, tags, and conditionals just like other tasks. Below is an example of adding 2 variables to a role inline of the playbook.
 

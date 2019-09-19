@@ -133,7 +133,7 @@ In this section you will..
                           ],
                           "members": [
                               {
-                                  "servicePort": 443,
+                                  "servicePort": 80,
                                   "serverAddresses": [
                                       {% set comma = joiner(",") %}
                                       {% for mem in groups['webservers'] %}
