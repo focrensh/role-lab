@@ -1,5 +1,5 @@
 Example 1: Deploy a Service
-=========================================
+===========================
 
 In this section we will create a new role and then add it to our existing playbook. The outline of the role is below.
 
@@ -31,7 +31,7 @@ To view the host inventory file and look at the values of the variables
    
       cat ~/networking-workshop/lab_inventory/hosts
 
-Now edit the ``defaults/main.yml`` file with the connection details below. 
+Now edit the ``defaults/main.yml`` file with the connection details below.
 
    .. code:: shell
      
