@@ -25,13 +25,13 @@ In this section we will create a new role and then add it to our existing playbo
 
 #. We will now set the default connection details for role to use when connecting to a BIG-IP. Since these vars will be **defaults** they can easily be overwritten by specifying vars in the playbook or when calling the role. They will only be used if nothing else with higher precedence is set in the playbook or role. The connection details we are going to set, such as **private_ip** (IP of the BIG-IP) ,are defined within our environments ``inventory/host`` file.
 
-To view the host inventory file and look at the values of the variables
+   To view the host inventory file and look at the values of the variables
 
    .. code:: shell
    
       cat ~/networking-workshop/lab_inventory/hosts
 
-Now edit the ``defaults/main.yml`` file with the connection details below.
+   Now edit the ``defaults/main.yml`` file with the connection details below.
 
    .. code:: shell
      
