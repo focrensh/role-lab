@@ -73,7 +73,7 @@ Below is the starting structure of a role. A brief description of each directory
 - README (markdown) is important for adding descriptions and context to your role for others to use
 - meta - contains information that ansible-galaxy uses to define the role (Author, dependencies, etc)
 
-This structure may seem overwhelming but there is a helpful command we will cover later for getting started which will create all of these folders/files for you.
+This structure may seem overwhelming but there is a helpful command, which we will cover later, for getting started that will create the folder/file structure for you.
 
 What is Ansible Galaxy
 ----------------------
@@ -99,7 +99,7 @@ Installing Roles from Galaxy
 
 By default **ansible** will look for and install roles in 1 of 2 places:
 
-   - Releative to current playbook being run: ``./roles`` 
+   - Releative to current playbook being run: ``./roles`` (This is the one we will use for this guide)
    - Global for the ansible install: ``/etc/ansible/roles``
 
 #. SSH to your lab ansible host with username studentX (where X is your student ID and password ansible)
@@ -159,6 +159,14 @@ By default **ansible** will look for and install roles in 1 of 2 places:
         - downloading role from https://github.com/focrensh/f5-role-facts/archive/master.tar.gz
         - extracting focrensh.f5_role_facts to /home/student1/roles/focrensh.f5_role_facts
         - focrensh.f5_role_facts (master) was installed successfully
+
+   .. NOTE:: Here are some additional commonly used commands when installing roles. You can use these depending on if you are testing a role or using specific versions. By default a Galaxy will install the newest tagged version of a role.
+
+      - ``ansible-galaxy install focrensh.f5_role_facts,v0.9.0`` | Install version v0.9.0 of the role
+      - ``ansible-galaxy install focrensh.f5_role_facts,v0.9.0 --force`` | Install the role even if another verison already exists
+      - ``ansible-galaxy install focrensh.f5_role_facts,master`` | Install the master branch of the role (even if its not tagged with a version)
+      - ``ansible-galaxy remove focrensh.f5_role_facts`` | Remove role from the environment
+      - ``ansible-galaxy info focrensh.f5_role_facts`` | View role meta information in CLI
 
 #. Run the ``ansible-galaxy list`` command again to see that the new role is installed.
 
@@ -334,14 +342,57 @@ You are encouraged to pick one of the use cases below and or come up with your o
 
 Take a look at |f5ansiblemodules| available and get started 
 
-Upload a role to Galaxy
+Upload a Role to Galaxy
 -----------------------
-Upload role to galaxy DEMO
 
+- To upload a role to galaxy using the methods below, you must first upload the role to Github. Both the CLI and GUI method below will ask which namespace and repo to import the role from. 
+- To add versions to your roles, using semantic versioning by using Git tags on your repo (v1.2.3)
+
+Uploading Roles with CLI
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. You must first authenticate to Galaxy using your github credentials. You can do this with password or github token. The below command will prompt you for your username and password. This will create a temporary access token between Galaxy and github.
+
+   .. code:: shell
+
+      ansible-galaxy login
+
+#. Now you will want to import the role from your github repo with the following command:
+
+   .. code:: shell
+
+      ansible-galaxy import <namespace> <repo>
+
+   |galaxycli|
+
+   After the import, you can see the same status on the galaxy portal under https://galaxy.ansible.com/my-imports/ 
+
+   |galaxyimported|
+
+Uploading Roles with GUI
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Go to Ansible Galaxy website: https://galaxy.ansible.com
+
+#. Login in the upper right corner and authenticate using the Github link presented. |ghlogo|
+
+#. Onced logged in, click on **My Content** on the left hand menu. |mycontent|
+
+#. Under the namespace github repo, select **+Add Content**. You will have two ways presented for importing content. In this example we are using github so we will select **Import Role from Github**.
+
+#. You will now be presented with a list of repos from your github namespace to import into galaxy. Select the correct repo and then **ok** to import. If you are missing required meta/readme info, Galaxy will provide you with an error of what to update.
+
+|galaxygui|
 
 .. |role-install| image:: images/galaxy-install.png
 .. |labenv| image:: images/env.png
 .. |ghlink| image:: images/ghlink.png
+.. |roleversions| image:: images/roleversions.png
+.. |galaxycli| image:: images/galaxy_cli.gif
+.. |galaxyimported| image:: images/galaxy_imported.png
+.. |ghlogo| image:: images/ghlogo.png
+.. |mycontent| image:: images/mycontent.png
+.. |galaxygui| image:: images/galaxygui.gif
 .. |f5ansibleroles| raw:: html
 
    <a href="https://galaxy.ansible.com/f5devcentral" target="_blank">F5 Ansible Roles</a>
