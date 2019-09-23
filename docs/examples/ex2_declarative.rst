@@ -179,7 +179,7 @@ In this section you will..
 
         - name: PRINT OUT WEB VIP FOR F5
           debug:
-            msg: "The VIP (Virtual IP) is https://{{ansible_host}}:8443"
+            msg: "The VIP (Virtual IP) is https://{{ansible_host}}"
 
 #. Run the play book with ``ansible-playbook role_playbook.yml``. The playbook will once again return the device facts as before, but it will now create the Service defined in the new Role using AS3. You should see the new tasks run with a similar output to what is below.
 

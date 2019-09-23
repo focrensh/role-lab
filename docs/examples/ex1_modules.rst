@@ -95,7 +95,7 @@ In this section we will create a new role and then add it to our existing playbo
       
       - name: PRINT OUT WEB VIP FOR F5
         debug:
-          msg: "The VIP (Virtual IP) is https://{{ansible_host}}:8443"
+          msg: "The VIP (Virtual IP) is https://{{ansible_host}}"
 
 #. It is best practice to modify the ``README.md`` in the roles folder with basic information about the role. It will have a template already laid out to make filling it out easier. It is common to add a short description, examples of what variables are needed, and an example of using the role in a playbook. This is not required, but is good practice. For an idea of what to put here, looking at existing Roles on galaxy is a good place to start. The ``meta/main.yml`` allows you to also specify author, revision, and dependency information for the role as well. This information will be displayed on the Ansible Galaxy portal as well. For the sake of this guide, we can skip these steps for now.
 
