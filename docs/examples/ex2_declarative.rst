@@ -93,6 +93,10 @@ In this section you will..
       
       - debug: var=as3_task.json.results
 
+      - name: PRINT OUT WEB VIP FOR F5
+        debug:
+          msg: "The VIP (Virtual IP) is https://{{ansible_host}}"
+
 
    Above in the 2nd task, you see that the body of the API call will be templated from a file called **as3.j2**. Take note that we are calling this file as a **template** which tells ansible to replace variables found within it. In the next step we will define this file.
 
@@ -177,9 +181,6 @@ In this section you will..
         - include_role:
             name: f5_role_as3
 
-        - name: PRINT OUT WEB VIP FOR F5
-          debug:
-            msg: "The VIP (Virtual IP) is https://{{ansible_host}}"
 
 #. Run the play book with ``ansible-playbook role_playbook.yml``. The playbook will once again return the device facts as before, but it will now create the Service defined in the new Role using AS3. You should see the new tasks run with a similar output to what is below.
 
