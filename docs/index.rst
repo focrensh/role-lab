@@ -361,6 +361,7 @@ Uploading Roles with GUI
 
 #. You will now be presented with a list of repos from your github namespace to import into galaxy. Select the correct repo and then **ok** to import. If you are missing required meta/readme info, Galaxy will provide you with an error of what to update.
 
+|galaxygui|
 
 Uploading Roles with CLI
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -384,7 +385,7 @@ Uploading Roles with CLI
    |galaxyimported|
 
 
-|galaxygui|
+
 
 .. |role-install| image:: images/galaxy-install.png
 .. |labenv| image:: images/env.png
