@@ -348,6 +348,20 @@ Upload a Role to Galaxy
 - To upload a role to galaxy using the methods below, you must first upload the role to Github. Both the CLI and GUI method below will ask which namespace and repo to import the role from. 
 - To add versions to your roles, using semantic versioning by using Git tags on your repo (v1.2.3)
 
+Uploading Roles with GUI
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Go to Ansible Galaxy website: https://galaxy.ansible.com
+
+#. Login in the upper right corner and authenticate using the Github link presented. |ghlogo|
+
+#. Onced logged in, click on **My Content** on the left hand menu. |mycontent|
+
+#. Under the namespace github repo, select **+Add Content**. You will have two ways presented for importing content. In this example we are using github so we will select **Import Role from Github**.
+
+#. You will now be presented with a list of repos from your github namespace to import into galaxy. Select the correct repo and then **ok** to import. If you are missing required meta/readme info, Galaxy will provide you with an error of what to update.
+
+
 Uploading Roles with CLI
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -369,18 +383,6 @@ Uploading Roles with CLI
 
    |galaxyimported|
 
-Uploading Roles with GUI
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-#. Go to Ansible Galaxy website: https://galaxy.ansible.com
-
-#. Login in the upper right corner and authenticate using the Github link presented. |ghlogo|
-
-#. Onced logged in, click on **My Content** on the left hand menu. |mycontent|
-
-#. Under the namespace github repo, select **+Add Content**. You will have two ways presented for importing content. In this example we are using github so we will select **Import Role from Github**.
-
-#. You will now be presented with a list of repos from your github namespace to import into galaxy. Select the correct repo and then **ok** to import. If you are missing required meta/readme info, Galaxy will provide you with an error of what to update.
 
 |galaxygui|
 
